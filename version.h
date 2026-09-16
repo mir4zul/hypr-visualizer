@@ -1,0 +1,3 @@
+#ifndef HYPR_VISUALIZER_VERSION_H
+#define HYPR_VISUALIZER_VERSION "0.5.0"
+#endif

@@ -18,6 +18,7 @@
 #include "layer-shell.h"
 #include "theme.h"
 #include "config.h"
+#include "version.h"
 
 static struct wl_display *display;
 static struct wl_compositor *compositor;
@@ -375,7 +376,7 @@ static int stream_levels(void) {
 int main(int argc,char **argv) {
     init_settings();reload_settings();
     if(argc==2 && !strcmp(argv[1],"--levels"))return stream_levels();
-    if(argc>1) {if(!strcmp(argv[1],"--version")){puts("hypr-visualizer 0.5.0");return 0;}
+    if(argc>1) {if(!strcmp(argv[1],"--version")){puts("hypr-visualizer " HYPR_VISUALIZER_VERSION);return 0;}
         fprintf(stderr,"Usage: hypr-visualizer [--version]\n");return 2;}
     if(!getenv("HYPRLAND_INSTANCE_SIGNATURE")){fprintf(stderr,"Run inside a Hyprland session.\n");return 1;}
     const char *runtime=getenv("XDG_RUNTIME_DIR");char lockpath[4096];

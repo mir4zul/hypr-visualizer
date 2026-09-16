@@ -1,5 +1,7 @@
 # hypr-visualizer
 
+**Current release: `v0.5.0`**
+
 A small native audio visualizer for **Hyprland**. Rounded pastel bars react to your music across every monitor, with bass in the center, mirrored motion, and a soft fade into your wallpaper.
 
 ![Mirrored pastel audio bars with a soft bottom fade](docs/preview.svg)

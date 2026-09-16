@@ -16,7 +16,7 @@ build/layer-shell.c: protocol/wlr-layer-shell-unstable-v1.xml | build
 	wayland-scanner private-code $< $@
 build/xdg-shell.c: $(WAYLAND_PROTOCOLS_DIR)/stable/xdg-shell/xdg-shell.xml | build
 	wayland-scanner private-code $< $@
-build/hypr-visualizer: main.c theme.h config.h build/layer-shell.h build/layer-shell.c build/xdg-shell.c
+build/hypr-visualizer: main.c theme.h config.h version.h build/layer-shell.h build/layer-shell.c build/xdg-shell.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) main.c build/layer-shell.c build/xdg-shell.c -o $@ $(LDLIBS)
 install: all
 	install -Dm755 build/hypr-visualizer "$(DESTDIR)$(PREFIX)/bin/hypr-visualizer"
