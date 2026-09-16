@@ -2,6 +2,8 @@
 
 **Current release: `v0.5.0`**
 
+Hypr Visualizer is a native C, Wayland and Cairo audio visualizer for Hyprland. It is maintained by Mirajul Islam and released under the [MIT license](LICENSE). Project source, issue tracking and updates are available on [GitHub](https://github.com/mir4zul/hypr-visualizer).
+
 A small native audio visualizer for **Hyprland**. Rounded pastel bars react to your music across every monitor, with bass in the center, mirrored motion, and a soft fade into your wallpaper.
 
 ![Mirrored pastel audio bars with a soft bottom fade](docs/preview.svg)

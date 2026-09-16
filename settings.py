@@ -9,6 +9,7 @@ import tempfile
 from pathlib import Path
 
 CONFIG = Path(os.environ.get('XDG_CONFIG_HOME', Path.home() / '.config')) / 'hypr-visualizer/config'
+APP_VERSION = '0.5.0'
 CLASSIC_COLORS = '#ffdf7e,#e4d783,#aaba87,#719f99,#267e96,#086b94,#385e8a,#65517f,#9e3969,#cc285b,#ec6065,#f09b75,#ffcf7b,#ffdf7e,#e4d783,#aaba87,#719f99,#267e96'
 PRESETS = {
     'classic': CLASSIC_COLORS,
@@ -164,6 +165,7 @@ def gui():
             wallpaper = Gtk.Button(label='Pick wallpaper colors…');wallpaper.connect('clicked', self.choose_wallpaper);outer.append(wallpaper)
             buttons = Gtk.Box(spacing=8)
             reset = Gtk.Button(label='Restore Classic');reset.connect('clicked', self.restore);buttons.append(reset)
+            about = Gtk.Button(label='About');about.connect('clicked', self.show_about);buttons.append(about)
             outer.append(buttons)
             self.status = Gtk.Label(label='Saved automatically', wrap=True, xalign=0)
             self.status.add_css_class('dim-label')
@@ -255,6 +257,18 @@ def gui():
                 dialog.destroy()
                 self.chooser = None
             chooser.connect('response', chosen);self.chooser = chooser;chooser.show()
+
+        def show_about(self, _):
+            about = Gtk.AboutDialog(transient_for=self.props.active_window, modal=True)
+            about.set_application_name('Hypr Visualizer')
+            about.set_title('About Hypr Visualizer')
+            about.set_version(APP_VERSION)
+            about.set_comments('A native Hyprland audio visualizer with adaptive bars, live themes and DMS lockscreen support.')
+            about.set_website('https://github.com/mir4zul/hypr-visualizer')
+            about.set_website_label('Open project on GitHub')
+            about.set_license_type(Gtk.License.MIT_X11)
+            about.set_authors(['Mirajul Islam'])
+            about.present()
 
     App().run([])
 
