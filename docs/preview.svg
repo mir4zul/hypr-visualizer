@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="540" viewBox="0 0 1440 540" role="img" aria-label="Hypr visualizer: pastel mirrored audio bars, bass in the center, fading at the bottom">
+<rect width="100%" height="100%" fill="#1e2044"/>
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffdf7e" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ffdf7e" stop-opacity="0.6"/><stop offset="1" stop-color="#ffdf7e" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b1" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f4dc80" stop-opacity="0.6"/><stop offset="0.65" stop-color="#f4dc80" stop-opacity="0.6"/><stop offset="1" stop-color="#f4dc80" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b2" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e9d882" stop-opacity="0.6"/><stop offset="0.65" stop-color="#e9d882" stop-opacity="0.6"/><stop offset="1" stop-color="#e9d882" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b3" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d6d084" stop-opacity="0.6"/><stop offset="0.65" stop-color="#d6d084" stop-opacity="0.6"/><stop offset="1" stop-color="#d6d084" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b4" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#bec486" stop-opacity="0.6"/><stop offset="0.65" stop-color="#bec486" stop-opacity="0.6"/><stop offset="1" stop-color="#bec486" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b5" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#a6b888" stop-opacity="0.6"/><stop offset="0.65" stop-color="#a6b888" stop-opacity="0.6"/><stop offset="1" stop-color="#a6b888" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b6" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8ead90" stop-opacity="0.6"/><stop offset="0.65" stop-color="#8ead90" stop-opacity="0.6"/><stop offset="1" stop-color="#8ead90" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b7" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#77a297" stop-opacity="0.6"/><stop offset="0.65" stop-color="#77a297" stop-opacity="0.6"/><stop offset="1" stop-color="#77a297" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b8" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#599598" stop-opacity="0.6"/><stop offset="0.65" stop-color="#599598" stop-opacity="0.6"/><stop offset="1" stop-color="#599598" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b9" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#3a8797" stop-opacity="0.6"/><stop offset="0.65" stop-color="#3a8797" stop-opacity="0.6"/><stop offset="1" stop-color="#3a8797" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b10" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#227b96" stop-opacity="0.6"/><stop offset="0.65" stop-color="#227b96" stop-opacity="0.6"/><stop offset="1" stop-color="#227b96" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b11" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#157395" stop-opacity="0.6"/><stop offset="0.65" stop-color="#157395" stop-opacity="0.6"/><stop offset="1" stop-color="#157395" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b12" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#096b94" stop-opacity="0.6"/><stop offset="0.65" stop-color="#096b94" stop-opacity="0.6"/><stop offset="1" stop-color="#096b94" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b13" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1b6690" stop-opacity="0.6"/><stop offset="0.65" stop-color="#1b6690" stop-opacity="0.6"/><stop offset="1" stop-color="#1b6690" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b14" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#2f618c" stop-opacity="0.6"/><stop offset="0.65" stop-color="#2f618c" stop-opacity="0.6"/><stop offset="1" stop-color="#2f618c" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b15" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#425b88" stop-opacity="0.6"/><stop offset="0.65" stop-color="#425b88" stop-opacity="0.6"/><stop offset="1" stop-color="#425b88" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b16" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#555683" stop-opacity="0.6"/><stop offset="0.65" stop-color="#555683" stop-opacity="0.6"/><stop offset="1" stop-color="#555683" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b17" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#68507e" stop-opacity="0.6"/><stop offset="0.65" stop-color="#68507e" stop-opacity="0.6"/><stop offset="1" stop-color="#68507e" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b18" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7f4675" stop-opacity="0.6"/><stop offset="0.65" stop-color="#7f4675" stop-opacity="0.6"/><stop offset="1" stop-color="#7f4675" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b19" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#973c6c" stop-opacity="0.6"/><stop offset="0.65" stop-color="#973c6c" stop-opacity="0.6"/><stop offset="1" stop-color="#973c6c" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b20" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ab3465" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ab3465" stop-opacity="0.6"/><stop offset="1" stop-color="#ab3465" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b21" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#bf2d5f" stop-opacity="0.6"/><stop offset="0.65" stop-color="#bf2d5f" stop-opacity="0.6"/><stop offset="1" stop-color="#bf2d5f" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b22" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d02f5c" stop-opacity="0.6"/><stop offset="0.65" stop-color="#d02f5c" stop-opacity="0.6"/><stop offset="1" stop-color="#d02f5c" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b23" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dd4660" stop-opacity="0.6"/><stop offset="0.65" stop-color="#dd4660" stop-opacity="0.6"/><stop offset="1" stop-color="#dd4660" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b24" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ea5d65" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ea5d65" stop-opacity="0.6"/><stop offset="1" stop-color="#ea5d65" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b25" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ed766b" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ed766b" stop-opacity="0.6"/><stop offset="1" stop-color="#ed766b" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b26" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ef8e71" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ef8e71" stop-opacity="0.6"/><stop offset="1" stop-color="#ef8e71" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b27" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f3a576" stop-opacity="0.6"/><stop offset="0.65" stop-color="#f3a576" stop-opacity="0.6"/><stop offset="1" stop-color="#f3a576" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b28" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f9bb79" stop-opacity="0.6"/><stop offset="0.65" stop-color="#f9bb79" stop-opacity="0.6"/><stop offset="1" stop-color="#f9bb79" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b29" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffcf7b" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ffcf7b" stop-opacity="0.6"/><stop offset="1" stop-color="#ffcf7b" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b30" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffd67c" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ffd67c" stop-opacity="0.6"/><stop offset="1" stop-color="#ffd67c" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b31" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffdd7e" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ffdd7e" stop-opacity="0.6"/><stop offset="1" stop-color="#ffdd7e" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b32" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f8dd7f" stop-opacity="0.6"/><stop offset="0.65" stop-color="#f8dd7f" stop-opacity="0.6"/><stop offset="1" stop-color="#f8dd7f" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b33" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#edda81" stop-opacity="0.6"/><stop offset="0.65" stop-color="#edda81" stop-opacity="0.6"/><stop offset="1" stop-color="#edda81" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b34" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ded483" stop-opacity="0.6"/><stop offset="0.65" stop-color="#ded483" stop-opacity="0.6"/><stop offset="1" stop-color="#ded483" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b35" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c6c885" stop-opacity="0.6"/><stop offset="0.65" stop-color="#c6c885" stop-opacity="0.6"/><stop offset="1" stop-color="#c6c885" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b36" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#aebc87" stop-opacity="0.6"/><stop offset="0.65" stop-color="#aebc87" stop-opacity="0.6"/><stop offset="1" stop-color="#aebc87" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b37" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#97b18d" stop-opacity="0.6"/><stop offset="0.65" stop-color="#97b18d" stop-opacity="0.6"/><stop offset="1" stop-color="#97b18d" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b38" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7fa695" stop-opacity="0.6"/><stop offset="0.65" stop-color="#7fa695" stop-opacity="0.6"/><stop offset="1" stop-color="#7fa695" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b39" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#649998" stop-opacity="0.6"/><stop offset="0.65" stop-color="#649998" stop-opacity="0.6"/><stop offset="1" stop-color="#649998" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b40" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#458c97" stop-opacity="0.6"/><stop offset="0.65" stop-color="#458c97" stop-opacity="0.6"/><stop offset="1" stop-color="#458c97" stop-opacity="0.132"/></linearGradient>
+<linearGradient id="b41" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#267e96" stop-opacity="0.6"/><stop offset="0.65" stop-color="#267e96" stop-opacity="0.6"/><stop offset="1" stop-color="#267e96" stop-opacity="0.132"/></linearGradient>
+</defs>
+<text x="64" y="85" fill="#f3f0ff" font-family="sans-serif" font-size="38" font-weight="600">hypr-visualizer</text>
+<text x="66" y="124" fill="#b9bad3" font-family="sans-serif" font-size="18">Native audio bars for Hyprland</text>
+<rect x="4.80" y="484.57" width="24.69" height="80.11" rx="12.34" fill="url(#b0)"/>
+<rect x="39.09" y="468.77" width="24.69" height="95.91" rx="12.34" fill="url(#b1)"/>
+<rect x="73.37" y="426.74" width="24.69" height="137.95" rx="12.34" fill="url(#b2)"/>
+<rect x="107.66" y="396.23" width="24.69" height="168.46" rx="12.34" fill="url(#b3)"/>
+<rect x="141.94" y="400.93" width="24.69" height="163.76" rx="12.34" fill="url(#b4)"/>
+<rect x="176.23" y="421.53" width="24.69" height="143.16" rx="12.34" fill="url(#b5)"/>
+<rect x="210.51" y="419.31" width="24.69" height="145.38" rx="12.34" fill="url(#b6)"/>
+<rect x="244.80" y="383.41" width="24.69" height="181.27" rx="12.34" fill="url(#b7)"/>
+<rect x="279.09" y="344.10" width="24.69" height="220.59" rx="12.34" fill="url(#b8)"/>
+<rect x="313.37" y="335.81" width="24.69" height="228.88" rx="12.34" fill="url(#b9)"/>
+<rect x="347.66" y="355.09" width="24.69" height="209.60" rx="12.34" fill="url(#b10)"/>
+<rect x="381.94" y="364.84" width="24.69" height="199.85" rx="12.34" fill="url(#b11)"/>
+<rect x="416.23" y="339.57" width="24.69" height="225.11" rx="12.34" fill="url(#b12)"/>
+<rect x="450.51" y="296.58" width="24.69" height="268.10" rx="12.34" fill="url(#b13)"/>
+<rect x="484.80" y="274.79" width="24.69" height="289.90" rx="12.34" fill="url(#b14)"/>
+<rect x="519.09" y="287.23" width="24.69" height="277.45" rx="12.34" fill="url(#b15)"/>
+<rect x="553.37" y="305.15" width="24.69" height="259.53" rx="12.34" fill="url(#b16)"/>
+<rect x="587.66" y="293.10" width="24.69" height="271.59" rx="12.34" fill="url(#b17)"/>
+<rect x="621.94" y="252.22" width="24.69" height="312.46" rx="12.34" fill="url(#b18)"/>
+<rect x="656.23" y="218.86" width="24.69" height="345.82" rx="12.34" fill="url(#b19)"/>
+<rect x="690.51" y="220.19" width="24.69" height="344.50" rx="12.34" fill="url(#b20)"/>
+<rect x="724.80" y="220.19" width="24.69" height="344.50" rx="12.34" fill="url(#b21)"/>
+<rect x="759.09" y="218.86" width="24.69" height="345.82" rx="12.34" fill="url(#b22)"/>
+<rect x="793.37" y="252.22" width="24.69" height="312.46" rx="12.34" fill="url(#b23)"/>
+<rect x="827.66" y="293.10" width="24.69" height="271.59" rx="12.34" fill="url(#b24)"/>
+<rect x="861.94" y="305.15" width="24.69" height="259.53" rx="12.34" fill="url(#b25)"/>
+<rect x="896.23" y="287.23" width="24.69" height="277.45" rx="12.34" fill="url(#b26)"/>
+<rect x="930.51" y="274.79" width="24.69" height="289.90" rx="12.34" fill="url(#b27)"/>
+<rect x="964.80" y="296.58" width="24.69" height="268.10" rx="12.34" fill="url(#b28)"/>
+<rect x="999.09" y="339.57" width="24.69" height="225.11" rx="12.34" fill="url(#b29)"/>
+<rect x="1033.37" y="364.84" width="24.69" height="199.85" rx="12.34" fill="url(#b30)"/>
+<rect x="1067.66" y="355.09" width="24.69" height="209.60" rx="12.34" fill="url(#b31)"/>
+<rect x="1101.94" y="335.81" width="24.69" height="228.88" rx="12.34" fill="url(#b32)"/>
+<rect x="1136.23" y="344.10" width="24.69" height="220.59" rx="12.34" fill="url(#b33)"/>
+<rect x="1170.51" y="383.41" width="24.69" height="181.27" rx="12.34" fill="url(#b34)"/>
+<rect x="1204.80" y="419.31" width="24.69" height="145.38" rx="12.34" fill="url(#b35)"/>
+<rect x="1239.09" y="421.53" width="24.69" height="143.16" rx="12.34" fill="url(#b36)"/>
+<rect x="1273.37" y="400.93" width="24.69" height="163.76" rx="12.34" fill="url(#b37)"/>
+<rect x="1307.66" y="396.23" width="24.69" height="168.46" rx="12.34" fill="url(#b38)"/>
+<rect x="1341.94" y="426.74" width="24.69" height="137.95" rx="12.34" fill="url(#b39)"/>
+<rect x="1376.23" y="468.77" width="24.69" height="95.91" rx="12.34" fill="url(#b40)"/>
+<rect x="1410.51" y="484.57" width="24.69" height="80.11" rx="12.34" fill="url(#b41)"/>
+</svg>
