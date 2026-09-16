@@ -6,6 +6,22 @@ A small native audio visualizer for **Hyprland**. Rounded pastel bars react to y
 
 *Illustrative preview. The app draws only the bars; your wallpaper stays in place. Actual heights follow your audio.*
 
+## Find things quickly
+
+| Need | File or command |
+| --- | --- |
+| Install or update | [`install.sh`](install.sh) · `./install.sh` |
+| Open live settings | `~/.local/bin/hypr-visualizer-settings` |
+| Change Classic defaults | [`theme.h`](theme.h) |
+| Runtime settings format | [`config.h`](config.h) · `~/.config/hypr-visualizer/config` |
+| Desktop renderer and audio | [`main.c`](main.c) |
+| DMS lockscreen view | [`lockscreen/Bars.qml`](lockscreen/Bars.qml) |
+| App icon | [`assets/hypr-visualizer.svg`](assets/hypr-visualizer.svg) |
+| Run all checks | `make test && python3 tests/settings.py && python3 tests/install.py` |
+| Remove installation | `~/.local/share/hypr-visualizer/uninstall.sh` |
+
+The sections below follow this order: **Install → Lock screen → Appearance → Update → Troubleshooting → Development**.
+
 - **Classic theme preserved by default.** Optional GTK settings window and live config reload; no rebuilding.
 - **Bass-reactive glow**, Classic/Aurora/Sunset/Ocean palettes, custom gradients and colors extracted from a chosen wallpaper image.
 - **Bars, wave, thin lines and rounded pill styles**, with optional natural motion that lifts quiet details and softens loud peaks.
