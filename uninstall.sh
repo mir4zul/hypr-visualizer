@@ -23,13 +23,18 @@ for target in (config / 'hypr/hyprland.conf', config / 'hypr/hyprland.lua', conf
     else:
         changed = ''.join(line for line in original.splitlines(keepends=True)
                           if not (('/.local/bin/hypr-visualizer' in line and (line.lstrip().startswith('exec-once') or line.lstrip().startswith('hl.on(')))
+                                  or 'hypr-visualizer-settings' in line
+                                  or 'io.github.hyprvisualizer.Settings' in line
                                   or line.strip() in ('# hypr-visualizer desktop audio bars', '-- hypr-visualizer desktop audio bars')))
     if changed != original:
         shutil.copy2(target, str(target) + '.hypr-visualizer-uninstall-backup-' + datetime.now().strftime('%Y%m%d%H%M%S'))
         target.write_text(changed)
 (home / '.local/bin/hypr-visualizer').unlink(missing_ok=True)
+(home / '.local/bin/hypr-visualizer-settings').unlink(missing_ok=True)
 (config / 'autostart/hypr-visualizer.desktop').unlink(missing_ok=True)
 data = Path(os.environ.get('XDG_DATA_HOME', home / '.local/share')) / 'hypr-visualizer'
+(data.parent / 'icons/hicolor/scalable/apps/hypr-visualizer.svg').unlink(missing_ok=True)
+(data.parent / 'applications/hypr-visualizer-settings.desktop').unlink(missing_ok=True)
 for name in ('Bars.qml', 'Levels.qml', 'qmldir'):
     (data / 'lockscreen' / name).unlink(missing_ok=True)
 (data / 'uninstall.sh').unlink(missing_ok=True)

@@ -17,6 +17,7 @@
 #include <string.h>
 #include "layer-shell.h"
 #include "theme.h"
+#include "config.h"
 
 static struct wl_display *display;
 static struct wl_compositor *compositor;
@@ -31,8 +32,8 @@ struct output {
     struct wl_output *wl;
     struct wl_surface *surface;
     struct zwlr_layer_surface_v1 *layer;
-    int width, height, configured, redraw, closed;
-    float shown[BAR_COUNT];
+    int width, height, configured, redraw, closed, bar_count;
+    float shown[MAX_VISIBLE_BARS];
     struct buffer buffers[2];
     struct output *next;
 };
@@ -64,7 +65,7 @@ static void configure(void *data,struct zwlr_layer_surface_v1 *layer,uint32_t se
     struct output *o=data;
     zwlr_layer_surface_v1_ack_configure(layer,serial);
     if (w && h && (o->width!=(int)w || o->height!=(int)h)) {
-        discard_buffers(o);o->width=w;o->height=h;o->redraw=1;
+        discard_buffers(o);o->width=w;o->height=h;o->redraw=1;memset(o->shown,0,sizeof o->shown);
     }
     o->configured=o->width>0 && o->height>0;
 }
@@ -234,19 +235,103 @@ static void display_levels(float *target) {
     mirror_spectrum(spectrum,target);
 }
 static float animate_level(float current,float target) {
-    float tau=target>current?ATTACK_SECONDS:RELEASE_SECONDS;
+    if(settings.natural) {
+        /* Lift quiet details gently and compress loud peaks without raising silence. */
+        target=target<=0?0:0.88f*powf(target,0.8f);
+    }
+    float tau=target>current?settings.attack:settings.release;
+    if(settings.natural)tau=fmaxf(tau,target>current?0.10f:0.30f);
     float value=current+(target-current)*(1-expf(-1.0f/(FPS*tau)));
     return value<0.001f?0:value;
 }
+/* Surface sizes are logical pixels, so density also follows monitor scaling. */
+static int visible_bar_count(int width) {
+    int count = (int)(width / (settings.bar_width+settings.gap));
+    if (count < 2) count = 2;
+    if (count > MAX_VISIBLE_BARS) count = MAX_VISIBLE_BARS;
+    return count - count % 2;
+}
+static float resample_level(const float *source, int count, int index) {
+    float position = index * (BAR_COUNT - 1.0f) / (count - 1);
+    int left = (int)position, right = left + 1 < BAR_COUNT ? left + 1 : left;
+    return source[left] + (source[right] - source[left]) * (position - left);
+}
+static void render_bars(cairo_t *cr,int width,int height,const float *shown,int count) {
+    cairo_set_operator(cr,CAIRO_OPERATOR_CLEAR);cairo_paint(cr);cairo_set_operator(cr,CAIRO_OPERATOR_OVER);
+    double bass=(shown[count/2]+shown[count/2-1])*0.5;
+    double step=(double)width/count, thickness=step*settings.bar_width/(settings.bar_width+settings.gap);
+    if(settings.style==1) {
+        float peak=0;for(int i=0;i<count;i++)peak=fmaxf(peak,shown[i]);
+        if(peak*fmax(0,height*settings.height-thickness)<1)return;
+        cairo_move_to(cr,0,height-shown[0]*fmax(0,height*settings.height-thickness));
+        for(int i=0;i<count;i++) {
+            double y=height-shown[i]*fmax(0,height*settings.height-thickness);
+            if(!i)cairo_line_to(cr,0.5*step,y);
+            else {
+                double scale=fmax(0,height*settings.height-thickness);
+                double previous=height-shown[i-1]*scale;
+                double before=height-shown[i>1?i-2:0]*scale;
+                double after=height-shown[i+1<count?i+1:i]*scale;
+                cairo_curve_to(cr,(i-0.5)*step+step/3,previous+(y-before)/6,
+                    (i+0.5)*step-step/3,y-(after-previous)/6,(i+0.5)*step,y);
+            }
+        }
+        cairo_line_to(cr,width,height-shown[count-1]*fmax(0,height*settings.height-thickness));
+        for(int halo=5;halo>=0;halo--) {
+            double alpha=halo?settings.opacity*settings.glow*bass*0.025:settings.opacity;
+            if(alpha<=0)continue;
+            cairo_pattern_t *gradient=cairo_pattern_create_linear(0,0,width,0);
+            for(int j=0;j<settings.color_count;j++) {
+                unsigned c=settings.colors[j];
+                cairo_pattern_add_color_stop_rgba(gradient,(double)j/(settings.color_count-1),
+                    ((c>>16)&255)/255.0,((c>>8)&255)/255.0,(c&255)/255.0,alpha);
+            }
+            cairo_set_source(cr,gradient);cairo_pattern_destroy(gradient);
+            cairo_set_line_width(cr,halo?3+halo*4:3);cairo_set_line_cap(cr,CAIRO_LINE_CAP_ROUND);
+            cairo_stroke_preserve(cr);
+        }
+        cairo_new_path(cr);return;
+    }
+    for(int i=0;i<count;i++) {
+        double bar=shown[i]*fmax(0,height*settings.height-thickness);
+        if(bar<1)continue;
+        unsigned color=color_at((double)i/(count-1));
+        double r=((color>>16)&255)/255.0,g=((color>>8)&255)/255.0,blue=(color&255)/255.0;
+        double x=(i+0.5)*step, y=height-bar;
+        double line_width=settings.style==2?fmin(3,thickness):thickness;
+        double bottom=settings.style==3?height-thickness/2:height+thickness;
+        if(settings.style==3)y=fmin(y,height-thickness/2);
+        for(int halo=5;halo>0;halo--) {
+            if(settings.glow<=0 || bass<=0)break;
+            cairo_pattern_t *light=cairo_pattern_create_linear(0,y,0,height);
+            double alpha=settings.opacity*settings.glow*bass*0.045;
+            cairo_pattern_add_color_stop_rgba(light,0,r,g,blue,alpha);
+            cairo_pattern_add_color_stop_rgba(light,1,r,g,blue,alpha*BASE_ALPHA);
+            cairo_set_source(cr,light);cairo_pattern_destroy(light);
+            cairo_set_line_width(cr,line_width+halo*4);
+            cairo_set_line_cap(cr,CAIRO_LINE_CAP_ROUND);
+            cairo_move_to(cr,x,bottom);cairo_line_to(cr,x,y);cairo_stroke(cr);
+        }
+        cairo_pattern_t *gradient=cairo_pattern_create_linear(0,height-bar-thickness/2,0,height);
+        cairo_pattern_add_color_stop_rgba(gradient,0,r,g,blue,settings.opacity);
+        cairo_pattern_add_color_stop_rgba(gradient,0.65,r,g,blue,settings.opacity);
+        cairo_pattern_add_color_stop_rgba(gradient,1,r,g,blue,settings.opacity*BASE_ALPHA);
+        cairo_set_source(cr,gradient);cairo_pattern_destroy(gradient);
+        cairo_set_line_width(cr,line_width);cairo_set_line_cap(cr,CAIRO_LINE_CAP_ROUND);
+        cairo_move_to(cr,x,bottom);cairo_line_to(cr,x,y);cairo_stroke(cr);
+    }
+}
 static int draw(struct output *o) {
     int width=o->width,height=o->height,force=o->redraw;
+    int count=visible_bar_count(width);
+    if(o->bar_count!=count){memset(o->shown,0,sizeof o->shown);o->bar_count=count;force=1;}
     float *shown=o->shown;
     struct buffer *buffers=o->buffers;
     struct wl_surface *surface=o->surface;
     float target[BAR_COUNT];int changed=force;
     display_levels(target);
-    for(int i=0;i<BAR_COUNT;i++) {
-        float value=animate_level(shown[i],target[i]);
+    for(int i=0;i<count;i++) {
+        float value=animate_level(shown[i],resample_level(target,count,i));
         if(fabsf(value-shown[i])*height>0.1f)changed=1;
         shown[i]=value;
     }
@@ -257,25 +342,7 @@ static int draw(struct output *o) {
     if(!b->wl && !make_buffer(o,b)){running=0;return 0;}
     cairo_surface_t *cs=cairo_image_surface_create_for_data(b->data,CAIRO_FORMAT_ARGB32,width,height,width*4);
     cairo_t *cr=cairo_create(cs);
-    cairo_set_operator(cr,CAIRO_OPERATOR_CLEAR);cairo_paint(cr);cairo_set_operator(cr,CAIRO_OPERATOR_OVER);
-    double step=(double)width/BAR_COUNT, thickness=step*BAR_WIDTH_RATIO;
-    for(int i=0;i<BAR_COUNT;i++) {
-        double bar=shown[i]*fmax(0,height*BAR_HEIGHT_RATIO-thickness);
-        if(bar<1)continue;
-        double p=(double)i/(BAR_COUNT-1)*(sizeof palette/sizeof *palette-1);
-        int a=(int)p, z=a+1<(int)(sizeof palette/sizeof *palette)?a+1:a;
-        double t=p-a;unsigned c=palette[a],d=palette[z];
-        double r=(((c>>16)&255)*(1-t)+((d>>16)&255)*t)/255;
-        double g=(((c>>8)&255)*(1-t)+((d>>8)&255)*t)/255;
-        double blue=((c&255)*(1-t)+(d&255)*t)/255;
-        cairo_pattern_t *gradient=cairo_pattern_create_linear(0,height-bar-thickness/2,0,height);
-        cairo_pattern_add_color_stop_rgba(gradient,0,r,g,blue,OPACITY);
-        cairo_pattern_add_color_stop_rgba(gradient,0.65,r,g,blue,OPACITY);
-        cairo_pattern_add_color_stop_rgba(gradient,1,r,g,blue,OPACITY*BASE_ALPHA);
-        cairo_set_source(cr,gradient);cairo_pattern_destroy(gradient);
-        cairo_set_line_width(cr,thickness);cairo_set_line_cap(cr,CAIRO_LINE_CAP_ROUND);
-        cairo_move_to(cr,(i+0.5)*step,height+thickness);cairo_line_to(cr,(i+0.5)*step,height-bar);cairo_stroke(cr);
-    }
+    render_bars(cr,width,height,shown,count);
     cairo_destroy(cr);cairo_surface_destroy(cs);
     b->busy=1;wl_surface_attach(surface,b->wl,0,0);wl_surface_damage(surface,0,0,width,height);wl_surface_commit(surface);return 1;
 }
@@ -285,21 +352,18 @@ static int stream_levels(void) {
     if(pthread_create(&thread,NULL,audio_thread,NULL))return 1;
     float values[BAR_COUNT]={0};
     while(running) {
+        reload_settings();
         float target[BAR_COUNT];
         display_levels(target);
-        printf("{\"height\":%.3f,\"width\":%.3f,\"opacity\":%.3f,\"baseAlpha\":%.3f,\"levels\":[",BAR_HEIGHT_RATIO,BAR_WIDTH_RATIO,OPACITY,BASE_ALPHA);
+        printf("{\"style\":%d,\"glow\":%.3f,\"lockscreen\":%s,\"spacing\":%.3f,\"maxBars\":%d,\"height\":%.3f,\"width\":%.3f,\"opacity\":%.3f,\"baseAlpha\":%.3f,\"levels\":[",settings.style,settings.glow,settings.lockscreen?"true":"false",settings.bar_width+settings.gap,MAX_VISIBLE_BARS,settings.height,settings.bar_width/(settings.bar_width+settings.gap),settings.opacity,BASE_ALPHA);
         for(int i=0;i<BAR_COUNT;i++) {
             values[i]=animate_level(values[i],target[i]);
             printf("%s%.4f",i?",":"",values[i]);
         }
         printf("],\"colors\":[");
         for(int i=0;i<BAR_COUNT;i++) {
-            double position=(double)i/(BAR_COUNT-1)*(sizeof palette/sizeof *palette-1);
-            int a=(int)position,z=a+1<(int)(sizeof palette/sizeof *palette)?a+1:a;
-            double t=position-a;unsigned c=palette[a],d=palette[z];
-            unsigned r=((c>>16)&255)*(1-t)+((d>>16)&255)*t;
-            unsigned g=((c>>8)&255)*(1-t)+((d>>8)&255)*t;
-            unsigned b=(c&255)*(1-t)+(d&255)*t;
+            unsigned color=color_at((double)i/(BAR_COUNT-1));
+            unsigned r=(color>>16)&255,g=(color>>8)&255,b=color&255;
             printf("%s\"#%02x%02x%02x\"",i?",":"",r,g,b);
         }
         puts("]}");
@@ -309,8 +373,9 @@ static int stream_levels(void) {
     return 0;
 }
 int main(int argc,char **argv) {
+    init_settings();reload_settings();
     if(argc==2 && !strcmp(argv[1],"--levels"))return stream_levels();
-    if(argc>1) {if(!strcmp(argv[1],"--version")){puts("hypr-visualizer 0.4.0");return 0;}
+    if(argc>1) {if(!strcmp(argv[1],"--version")){puts("hypr-visualizer 0.5.0");return 0;}
         fprintf(stderr,"Usage: hypr-visualizer [--version]\n");return 2;}
     if(!getenv("HYPRLAND_INSTANCE_SIGNATURE")){fprintf(stderr,"Run inside a Hyprland session.\n");return 1;}
     const char *runtime=getenv("XDG_RUNTIME_DIR");char lockpath[4096];
@@ -344,6 +409,7 @@ int main(int argc,char **argv) {
         clock_gettime(CLOCK_MONOTONIC,&now);
         current=now.tv_sec*1000LL+now.tv_nsec/1000000;
         if(current>=next) {
+            if(reload_settings())for(struct output *o=outputs;o;o=o->next)o->redraw=1;
             create_surfaces();
             for(struct output *o=outputs;o;o=o->next)
                 if(o->configured && draw(o))o->redraw=0;

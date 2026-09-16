@@ -32,10 +32,16 @@ for syntax in ('lua', 'conf'):
         assert target.read_text().count('/.local/bin/hypr-visualizer') == 1
         assert lock.read_text().count('id: hyprVisualizerBars') == 1
         assert (home / '.local/bin/hypr-visualizer').is_file()
+        assert (home / '.local/bin/hypr-visualizer-settings').is_file()
+        assert (home / 'data/applications/hypr-visualizer-settings.desktop').is_file()
+        assert (home / 'data/icons/hicolor/scalable/apps/hypr-visualizer.svg').is_file()
         assert (home / 'data/hypr-visualizer/lockscreen/Bars.qml').is_file()
         subprocess.run(['./uninstall.sh'], cwd=repo, env=env, check=True, stdout=subprocess.DEVNULL)
         assert target.read_text().strip() == original.strip()
         assert lock.read_text() == lock_original
         assert not (home / '.local/bin/hypr-visualizer').exists()
+        assert not (home / '.local/bin/hypr-visualizer-settings').exists()
+        assert not (home / 'data/applications/hypr-visualizer-settings.desktop').exists()
+        assert not (home / 'data/icons/hicolor/scalable/apps/hypr-visualizer.svg').exists()
         assert not (home / 'data/hypr-visualizer/lockscreen/Bars.qml').exists()
         print(f'PASS: {syntax} install, repeat install, DMS integration, uninstall; paths with spaces')

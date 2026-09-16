@@ -9,7 +9,7 @@ Singleton {
     id: root
 
     property int users: 0
-    property var frame: ({ levels: [], colors: [], height: 0.48, width: 0.72, opacity: 0.60 })
+    property var frame: ({ levels: [], colors: [], height: 0.48, width: 0.72, opacity: 0.60, lockscreen: true })
 
     Process {
         id: reader
@@ -17,7 +17,7 @@ Singleton {
         running: root.users > 0
         onRunningChanged: {
             if (!running)
-                root.frame = { levels: [], colors: [], height: 0.48, width: 0.72, opacity: 0.60 };
+                root.frame = { levels: [], colors: [], height: 0.48, width: 0.72, opacity: 0.60, lockscreen: true };
         }
         stdout: SplitParser {
             onRead: data => {

@@ -24,10 +24,13 @@ config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hypr"
 if [ -f "$config_dir/hyprland.lua" ]; then
     config="$config_dir/hyprland.lua"
     entry='hl.on("hyprland.start", function() hl.exec_cmd("\"" .. os.getenv("HOME") .. "/.local/bin/hypr-visualizer\"") end)'
+    settings_entry='hl.window_rule({ name = "hypr-visualizer-settings", match = { class = "^io.github.hyprvisualizer.Settings$" }, float = true, size = "640 800" })'
     marker='-- hypr-visualizer desktop audio bars'
 elif [ -f "$config_dir/hyprland.conf" ]; then
     config="$config_dir/hyprland.conf"
     entry='exec-once = "$HOME/.local/bin/hypr-visualizer"'
+    settings_entry='windowrulev2 = float, class:^(io.github.hyprvisualizer.Settings)$
+windowrulev2 = size 410 560, class:^(io.github.hyprvisualizer.Settings)$'
     marker='# hypr-visualizer desktop audio bars'
 else
     echo "No Hyprland config found in $config_dir. Run this installer as your desktop user." >&2
@@ -35,6 +38,20 @@ else
 fi
 make
 make install PREFIX="$HOME/.local"
+icon_dir="${XDG_DATA_HOME:-$HOME/.local/share}/icons/hicolor/scalable/apps"
+install -Dm644 assets/hypr-visualizer.svg "$icon_dir/hypr-visualizer.svg"
+applications="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+mkdir -p "$applications"
+cat > "$applications/hypr-visualizer-settings.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Visualizer Settings
+Comment=Customize desktop audio bars
+Exec="$HOME/.local/bin/hypr-visualizer-settings"
+Icon=hypr-visualizer
+Terminal=false
+Categories=Settings;AudioVideo;
+EOF
 if [ "$lockscreen" = auto ] && [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/dms/Modules/Lock/LockScreenContent.qml" ]; then
     if command -v python3 >/dev/null; then
         python3 lockscreen/install.py || echo 'Desktop installed; DMS integration skipped. See the message above.' >&2
@@ -45,7 +62,10 @@ fi
 install -Dm755 uninstall.sh "${XDG_DATA_HOME:-$HOME/.local/share}/hypr-visualizer/uninstall.sh"
 if ! grep -Fq '/.local/bin/hypr-visualizer' "$config"; then
     cp -p "$config" "$config.hypr-visualizer-backup-$(date +%s)"
-    printf '\n%s\n%s\n' "$marker" "$entry" >> "$config"
+    printf '\n%s\n%s\n%s\n' "$marker" "$entry" "$settings_entry" >> "$config"
+elif ! grep -Fq 'hypr-visualizer-settings' "$config"; then
+    cp -p "$config" "$config.hypr-visualizer-backup-$(date +%s)"
+    printf '\n%s\n%s\n' "$marker" "$settings_entry" >> "$config"
 fi
 if [ "$start" = true ] && [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ] && [ -n "${WAYLAND_DISPLAY:-}" ]; then
     if command -v systemctl >/dev/null; then

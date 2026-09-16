@@ -6,9 +6,11 @@ A small native audio visualizer for **Hyprland**. Rounded pastel bars react to y
 
 *Illustrative preview. The app draws only the bars; your wallpaper stays in place. Actual heights follow your audio.*
 
-- **No settings window or runtime config.** Change the source theme and rebuild.
+- **Classic theme preserved by default.** Optional GTK settings window and live config reload; no rebuilding.
+- **Bass-reactive glow**, Classic/Aurora/Sunset/Ocean palettes, custom gradients and colors extracted from a chosen wallpaper image.
+- **Bars, wave, thin lines and rounded pill styles**, with optional natural motion that lifts quiet details and softens loud peaks.
 - **All monitors**, including monitors connected after startup.
-- **42 bars**, smooth attack and release, 60% opacity, and a fading base.
+- **Screen-adaptive bars** (about 64 at 1920 logical pixels), smooth attack and release, 60% opacity, and a fading base.
 - **Output audio only**, including PipeWire-Pulse and Bluetooth; follows the default output.
 - **Click-through desktop layer.** Windows stay above the bars.
 - **Native C + Wayland + Cairo.** No browser, GTK, Qt, or CAVA needed for the desktop app.
@@ -67,11 +69,11 @@ make test
 ./build/hypr-visualizer
 ```
 
-`make install PREFIX="$HOME/.local"` installs only the binary. It does not add autostart or lockscreen integration. Run the binary inside Hyprland.
+`make install PREFIX="$HOME/.local"` installs the binary and settings script. It does not add autostart or lockscreen integration. Run the binary inside Hyprland.
 
 ## What the installer changes
 
-- Installs `~/.local/bin/hypr-visualizer` and an uninstall script.
+- Installs `~/.local/bin/hypr-visualizer`, `hypr-visualizer-settings`, a settings launcher and an uninstall script.
 - Backs up your Hyprland config before adding one autostart line.
 - Supports `hyprland.lua` and `hyprland.conf` in `$XDG_CONFIG_HOME/hypr` (default `~/.config/hypr`). Lua takes priority if both exist. Custom config locations need manual autostart setup.
 - Starts immediately in an active Hyprland session. Uses a transient systemd user service when available; otherwise launches a background process.
@@ -93,22 +95,49 @@ Lockscreen views share one additional audio-only helper while visible. Silence m
 
 DMS updates may replace the patched lockscreen file. Re-run `./install.sh` afterward. If DMS disables hot reload, reload DMS while your session is unlocked. An incompatible DMS layout is skipped without preventing desktop installation.
 
-## Appearance
+## Appearance and live settings
 
-Edit [`theme.h`](theme.h), then run `./install.sh` again. The lockscreen receives the theme from the compiled binary too.
+The default **Classic** preset preserves the previous palette, bars, opacity and motion, with glow off. Open **Visualizer Settings** from your app launcher or run:
 
-| Constant | Default | Effect |
-| --- | --- | --- |
-| `BAR_COUNT` | `42` | Total visible bars |
-| `BAR_HEIGHT_RATIO` | `0.48` | Maximum height relative to the monitor |
-| `BAR_WIDTH_RATIO` | `0.72` | Bar width within each slot; the rest is gap |
-| `OPACITY` | `0.60` | Main bar opacity |
-| `BASE_ALPHA` | `0.22` | Bottom opacity multiplier |
-| `ATTACK_SECONDS` | `0.055` | How quickly bars rise |
-| `RELEASE_SECONDS` | `0.24` | How slowly bars fall |
-| `FPS` | `30` | Rendering target |
+```sh
+~/.local/bin/hypr-visualizer-settings
+```
 
-`palette` controls the left-to-right colors. Bass and treble gains adjust the visual balance without changing speaker volume. Keep bar count at least 2, FPS positive, and ratios/opacity between 0 and 1.
+Choose a palette (Classic, Aurora, Sunset, Ocean), edit a custom comma-separated hex gradient, or choose a wallpaper image to extract its dominant colors. Wallpaper colors are a saved snapshot of the image you select; changing your desktop wallpaper does not automatically re-extract them. A shared palette is used across monitors.
+
+The settings window controls bar width and gap in logical pixels, height, opacity, bass glow, rise/fall timing, **Bars / Wave / Lines / Pill** styles, **Classic / Natural** movement, and whether the visualizer appears on the **lockscreen**. Natural movement lifts quiet details, compresses loud peaks and slows abrupt changes while keeping silence invisible. Wave and Lines use a thin 3-pixel stroke; width and gap still control their sample spacing. Changes save automatically and update both desktop and lockscreen, usually within about 100 milliseconds; there is no Apply button. **Restore Classic** restores the complete original look, including disabling glow.
+
+The optional settings window needs **GTK 4 + PyGObject**; wallpaper extraction also needs **Pillow**. On Arch these packages are `gtk4 python-gobject python-pillow`; on Debian/Ubuntu they are `gir1.2-gtk-4.0 python3-gi python3-pil`. The desktop renderer remains native C + Wayland + Cairo and can use runtime configuration without GTK.
+
+CLI examples:
+
+```sh
+hypr-visualizer-settings --set theme=aurora --set glow=0.6 --set motion=natural
+hypr-visualizer-settings --set style=wave --set opacity=0.7
+hypr-visualizer-settings --set theme=custom --set 'colors=#74c0fc,#b197fc,#f783ac'
+hypr-visualizer-settings --wallpaper '/path/to/wallpaper.jpg'
+hypr-visualizer-settings --classic
+hypr-visualizer-settings --show
+```
+
+Settings are stored at `${XDG_CONFIG_HOME:-~/.config}/hypr-visualizer/config`:
+
+```ini
+theme=classic
+style=bars
+motion=classic
+bar_width=21.6
+gap=8.4
+height=0.48
+opacity=0.6
+glow=0
+attack=0.055
+release=0.24
+```
+
+Optional `colors=#rrggbb,#rrggbb,...` overrides the palette; put it after `theme`. Values are validated and invalid files leave the last valid settings active. Deleting the config returns to Classic. The settings app saves atomically and preserves settings across reinstallations. There are at most 512 visible bars per monitor; the shared audio analyzer retains 42 bands, interpolated across the visible bars. Scaling uses logical screen size.
+
+[`theme.h`](theme.h) still contains compiled Classic defaults, analysis gains, base fade and the 30 FPS target for source-level customization.
 
 ## Update and uninstall
 
@@ -127,7 +156,7 @@ Uninstall:
 sh "${XDG_DATA_HOME:-$HOME/.local/share}/hypr-visualizer/uninstall.sh"
 ```
 
-The uninstaller stops the app, removes its autostart and DMS loader, and deletes installed app files. Config backups and logs remain available. Your source checkout is kept.
+The uninstaller stops the app, removes its autostart and DMS loader, and deletes installed app files. Saved visualizer settings, config backups and logs remain available. Your source checkout is kept.
 
 ## Troubleshooting and limitations
 
@@ -145,9 +174,10 @@ The uninstaller stops the app, removes its autostart and DMS loader, and deletes
 make
 make test
 python3 tests/install.py
+python3 tests/settings.py
 ```
 
-Tests cover silence, tones, attack/release, mirrored frequency placement, and isolated install/update/uninstall cycles for both config formats. Installer tests use temporary homes and do not change your live session.
+Tests cover silence, tones, attack/release, mirrored frequency placement, adaptive density, Classic defaults, config validation, all four render styles, glow, live reload, wallpaper extraction, and isolated install/update/uninstall cycles for both config formats. The settings test needs Pillow. Installer tests use temporary homes and do not change your live session.
 
 ## License
 

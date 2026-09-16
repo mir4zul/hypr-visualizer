@@ -1,5 +1,7 @@
-/* Edit these source constants, then run ./install.sh again. */
-#define BAR_COUNT 42
+/* Classic defaults. Use Visualizer Settings for live customization. */
+#define BAR_COUNT 42 /* Audio analysis bands, independent of screen width. */
+#define BAR_SPACING 30.0 /* Logical pixels per visible bar, including gap. */
+#define MAX_VISIBLE_BARS 512
 #define BAR_HEIGHT_RATIO 0.48
 #define BAR_WIDTH_RATIO 0.72
 #define FPS 30
